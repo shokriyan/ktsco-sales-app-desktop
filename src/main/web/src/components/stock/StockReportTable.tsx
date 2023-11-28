@@ -1,15 +1,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import useMainStock from "../../hooks/stock/useMainStock";
-import Banner from "../shared/Banner";
-import LoadSpinner from "../shared/LoadSpinner";
+import { useNavigate } from "react-router-dom";
+import { numberFormat } from "../../hooks/number-format";
 import { StockResponse } from "../../services/stock";
 import { CustomTable } from "../shared/CustomTable";
-import { numberFormat } from "../../hooks/number-format";
 import IconBtn from "../shared/buttons/IconBtn";
-import { useNavigate } from "react-router-dom";
+interface Props {
+  report: StockResponse[];
+}
 
-const StockReportTable = () => {
-  const { data: reprot, isLoading, isError } = useMainStock();
+const StockReportTable = ({ report }: Props) => {
   const navigate = useNavigate();
   const columnHelper = createColumnHelper<StockResponse>();
   const columns = [
@@ -47,10 +46,7 @@ const StockReportTable = () => {
       ),
     }),
   ];
-  if (isLoading) return <LoadSpinner />;
-  if (!reprot || isError)
-    return <Banner type="error">خطا در سیستم دوباره تلاش کنید</Banner>;
-  return <CustomTable data={reprot} columns={columns} haveFilter />;
+  return <CustomTable data={report} columns={columns} haveFilter />;
 };
 
 export default StockReportTable;

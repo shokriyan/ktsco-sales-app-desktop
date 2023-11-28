@@ -1,6 +1,7 @@
-import { HStack, Heading, Image, VStack } from "@chakra-ui/react";
+import { HStack, Heading, Image, Spacer, VStack } from "@chakra-ui/react";
 import ktscoLogo from "../../assets/ktsco.png";
 import LinkButton from "../shared/buttons/LinkButton";
+import ShutDownButton from "./ShutDownButton";
 
 const Header = () => {
   return (
@@ -12,12 +13,14 @@ const Header = () => {
         <Heading>دیتابیس ثبت فروشات</Heading>
         <Image src={ktscoLogo} boxSize={16} />
       </HStack>
-      <HStack backgroundColor="gray.400" width="100%" spacing={2}>
+      <HStack backgroundColor="gray.400" width="100%" spacing={2} pl={4} pr={4}>
         <LinkButton link="/customers" text="مشتریان" />
         <LinkButton link="/products" text="محصولات" />
-        <LinkButton link="/bills" text="بل فروشات" />
+        <LinkButton link="/" text="بل فروشات" />
         <LinkButton link="/sales" text="فروشات" />
         <LinkButton link="/stock" text="انبار" />
+        <Spacer />
+        <ShutDownButton />
       </HStack>
     </VStack>
   );

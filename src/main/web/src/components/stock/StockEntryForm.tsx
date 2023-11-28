@@ -8,30 +8,30 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
-import { StockInRequest, StockSaveResponse } from "../../services/stock";
-import { Product } from "../../services/product";
-import SubmitButton from "../shared/buttons/SubmitButton";
-import SecondaryButton from "../shared/buttons/SecondaryButton";
+import { useState } from "react";
 import useSaveStock from "../../hooks/stock/useSaveStock";
 import useCustomToast from "../../hooks/useCustomToast";
-import { useState } from "react";
+import { Product } from "../../services/product";
+import { StockInRequest } from "../../services/stock";
 import Banner from "../shared/Banner";
+import SecondaryButton from "../shared/buttons/SecondaryButton";
+import SubmitButton from "../shared/buttons/SubmitButton";
 interface Props {
   products: Product[];
-  onStockSaved: (response: StockSaveResponse) => void;
+  onStockSaved: () => void;
 }
 const StockEntryForm = ({ products, onStockSaved }: Props) => {
   const toast = useCustomToast("ورودی انبار");
   const [errorMessage, setErrorMessage] = useState("");
   const saveStockService = useSaveStock(
-    (response) => {
+    () => {
       toast({
         title: "ورودی انبار",
         description: "با موفقیت ثبت شد",
         status: "success",
       });
       setErrorMessage("");
-      onStockSaved(response);
+      onStockSaved();
     },
     (errorMessage) => {
       toast({

@@ -1,13 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Dashboard from "../components/dashboard/Dashboard";
-import CustomerMainPage from "../components/customers/CustomerMainPage";
-import SalesMainPage from "../components/sales/SalesMainPage";
-import ProductsMainPage from "../components/products/ProductsMainPage";
 import BillsMainPage from "../components/bills/BillsMainPage";
+import CustomerMainPage from "../components/customers/CustomerMainPage";
+import ProductsMainPage from "../components/products/ProductsMainPage";
 import SalesBillDetailMainPage from "../components/sales/SalesBillDetailMainPage";
-import StockMainPage from "../components/stock/StockMainPage";
+import SalesMainPage from "../components/sales/SalesMainPage";
 import StockDetailMain from "../components/stock/StockDetailMain";
+import StockMainPage from "../components/stock/StockMainPage";
 
 const router = createBrowserRouter([
   {
@@ -16,15 +15,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Dashboard />,
+        element: <BillsMainPage />,
       },
       {
         path: "/customers",
         element: <CustomerMainPage />,
-      },
-      {
-        path: "/bills",
-        element: <BillsMainPage />,
       },
       {
         path: "bill/:id",
