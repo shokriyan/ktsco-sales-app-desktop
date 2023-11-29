@@ -1,16 +1,15 @@
-package ktsco.app.models;
+package ktsco.app.models.stock;
 
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class StockInRequest {
-    private long productId;
-    private String inDate;
-    private BigDecimal quantityIn;
+  private long productId;
+  private String inDate;
+  private BigDecimal quantityIn;
 }

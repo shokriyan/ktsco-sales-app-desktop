@@ -1,5 +1,7 @@
 package ktsco.app.entities;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,11 +16,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Customer {
-
+public class Expense {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long customerId;
+  private long expenseId;
 
-  private String customerName;
+  private LocalDate expenseDate;
+  private String provider;
+  private String description;
+  private String unit;
+  private BigDecimal quantity;
+  private BigDecimal unitPrice;
+  private BigDecimal lineTotal;
 }

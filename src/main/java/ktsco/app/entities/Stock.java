@@ -1,10 +1,9 @@
 package ktsco.app.entities;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.persistence.*;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,13 +11,12 @@ import java.time.LocalDate;
 @Setter
 @Entity
 public class Stock {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long stockId;
-    @OneToOne
-    private Product product;
-    private LocalDate inDate;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long stockId;
 
-    private BigDecimal quantityIn;
+  @OneToOne private Product product;
+  private LocalDate inDate;
 
+  private BigDecimal quantityIn;
 }

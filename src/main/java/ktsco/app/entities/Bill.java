@@ -1,14 +1,12 @@
 package ktsco.app.entities;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,22 +14,17 @@ import java.util.Date;
 @Setter
 @Entity
 public class Bill {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long billId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long billId;
 
-    @OneToOne
-    private Customer customer;
+  @OneToOne private Customer customer;
 
-    private LocalDate billDate;
-    private long billNumber;
+  private LocalDate billDate;
+  private long billNumber;
 
-    @OneToOne
-    private Product product;
-    private BigDecimal quantity;
-    private BigDecimal unitPrice;
-    private BigDecimal lineTotal;
-
-
-
+  @OneToOne private Product product;
+  private BigDecimal quantity;
+  private BigDecimal unitPrice;
+  private BigDecimal lineTotal;
 }
