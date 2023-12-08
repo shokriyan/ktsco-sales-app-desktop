@@ -8,7 +8,14 @@ interface Props {
 
 const ProductDispaly = ({ product }: Props) => {
   return (
-    <Box rounded={5} borderWidth={1} borderColor="gray" width="100%" p={4}>
+    <Box
+      rounded={5}
+      borderWidth={1}
+      borderColor="gray"
+      width="100%"
+      p={4}
+      boxShadow="dark-lg"
+    >
       <SimpleGrid columns={3}>
         <TextData label="کد محصول">{product.productId}</TextData>
         <TextData label="نام محصول">{product.productName}</TextData>

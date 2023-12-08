@@ -1,9 +1,10 @@
 import { IconButton } from "@chakra-ui/react";
 import { ColorMap } from "../../../services/color-map";
 import { IconMap } from "../../../services/icon-map";
+import React from "react";
 
 interface Props {
-  icon: "add" | "delete" | "detail";
+  icon: "add" | "delete" | "detail" | "remove";
   color?: "primary" | "warning" | "secondary";
   onClick: () => void;
   isRounded?: boolean;
@@ -22,8 +23,9 @@ const IconBtn = ({
       onClick={() => onClick()}
       aria-label="icon-button"
       colorScheme={ColorMap(color)}
-      as={btnIcon}
-      size="sm"
+      icon={React.createElement(btnIcon, {
+        style: { fontSize: "26px", fontWeight: "bold" },
+      })}
     />
   );
 };

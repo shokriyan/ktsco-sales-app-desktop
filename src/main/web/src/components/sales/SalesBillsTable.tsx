@@ -30,6 +30,14 @@ const SalesBillsTable = ({ summary }: Props) => {
       cell: (info) => currency(info.getValue()),
       header: "مجموع مبلغ بل",
     }),
+    columnHelper.accessor("receivedTotal", {
+      cell: (info) => currency(info.getValue()),
+      header: "مجموع مبلغ رسید",
+    }),
+    columnHelper.accessor("receivedInFull", {
+      cell: (info) => (info.getValue() ? "رسید شده" : "رسید نشده"),
+      header: "وضعیت",
+    }),
     columnHelper.display({
       id: "detailIcon",
       header: "مشخصات بل",

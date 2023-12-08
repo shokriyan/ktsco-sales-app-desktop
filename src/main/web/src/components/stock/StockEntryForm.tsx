@@ -1,21 +1,11 @@
-import {
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Select,
-  VStack,
-} from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
+import { Heading, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import useSaveStock from "../../hooks/stock/useSaveStock";
 import useCustomToast from "../../hooks/useCustomToast";
 import { Product } from "../../services/product";
 import { StockInRequest } from "../../services/stock";
 import Banner from "../shared/Banner";
-import SecondaryButton from "../shared/buttons/SecondaryButton";
-import SubmitButton from "../shared/buttons/SubmitButton";
+import CommonForm, { FormData } from "../shared/CommonForm";
 interface Props {
   products: Product[];
   onStockSaved: () => void;
@@ -46,93 +36,49 @@ const StockEntryForm = ({ products, onStockSaved }: Props) => {
     inDate: "",
     quantityIn: 0,
   };
+  const stockFromData: FormData = {
+    initialValues: initialValues,
+    submitButtonText: "ثبت ورودی",
+    resetButtonText: "ورودی جدید",
+    fields: [
+      {
+        type: "select",
+        name: "productId",
+        label: "نام محصول",
+        isRequired: true,
+        options: products.map((each) => ({
+          value: each.productId,
+          text: `${each.productId} - ${each.productName} - ${each.unit}`,
+        })),
+        placeholder: "نام محصول را انتخاب کنید",
+      },
+      {
+        type: "input",
+        name: "inDate",
+        label: "تاریخ ورودی",
+        isRequired: true,
+        placeholder: "yyyy-MM-dd",
+      },
+      {
+        type: "input",
+        name: "quantityIn",
+        label: "تعداد ورودی",
+        isRequired: true,
+      },
+    ],
+  };
   return (
     <VStack align="flex-start" width="100%" spacing={5}>
       <Heading size="md">فرم ثبت ورودی انبار</Heading>
       {errorMessage && <Banner type="error">{errorMessage}</Banner>}
-      <Formik
-        initialValues={initialValues}
+      <CommonForm
+        formData={stockFromData}
         onSubmit={(values) => {
           setErrorMessage("");
           saveStockService.mutate(values);
         }}
-      >
-        {({ handleSubmit, resetForm, errors, touched, isValid }) => (
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
-            <Flex dir="row" gap={5} align="flex-end" width="100%">
-              <FormControl
-                isRequired
-                isInvalid={!!errors.productId && touched.productId}
-              >
-                <FormLabel htmlFor="productId">نام مشتری</FormLabel>
-                <Field
-                  as={Select}
-                  id="productId"
-                  name="productId"
-                  autoComplete="false"
-                  validate={(value: any) => {
-                    let error;
-                    if (!value || value == 0) error = "required";
-                    return error;
-                  }}
-                >
-                  <option value={0}>انتخاب محصول</option>
-                  {products.map((product) => (
-                    <option
-                      key={product.productId}
-                      value={product.productId}
-                    >{`${product.productId} - ${product.productName} - ${product.unit}`}</option>
-                  ))}
-                </Field>
-              </FormControl>
-              <FormControl
-                isRequired
-                isInvalid={!!errors.inDate && touched.inDate}
-              >
-                <FormLabel htmlFor="inDate">تاریخ ورودی</FormLabel>
-                <Field
-                  as={Input}
-                  id="inDate"
-                  name="inDate"
-                  autoComplete="false"
-                  placeholder="yyyy-MM-dd"
-                  validate={(value: any) => {
-                    let error;
-                    if (!value) error = "required";
-                    return error;
-                  }}
-                />
-              </FormControl>
-              <FormControl
-                isRequired
-                isInvalid={!!errors.quantityIn && touched.quantityIn}
-              >
-                <FormLabel htmlFor="quantityIn">تعداد ورودی</FormLabel>
-                <Field
-                  as={Input}
-                  id="quantityIn"
-                  name="quantityIn"
-                  autoComplete="false"
-                  validate={(value: any) => {
-                    let error;
-                    if (!value || value == 0) error = "required";
-                    return error;
-                  }}
-                />
-              </FormControl>
-              <SubmitButton isDisabled={!isValid}>ثبت ورودی</SubmitButton>
-              <SecondaryButton
-                onClick={() => {
-                  resetForm();
-                  setErrorMessage("");
-                }}
-              >
-                ورودی جدید
-              </SecondaryButton>
-            </Flex>
-          </Form>
-        )}
-      </Formik>
+        onFormReset={() => setErrorMessage("")}
+      />
     </VStack>
   );
 };

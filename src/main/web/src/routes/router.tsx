@@ -7,6 +7,10 @@ import SalesBillDetailMainPage from "../components/sales/SalesBillDetailMainPage
 import SalesMainPage from "../components/sales/SalesMainPage";
 import StockDetailMain from "../components/stock/StockDetailMain";
 import StockMainPage from "../components/stock/StockMainPage";
+import ExpenseMainPage from "../components/expense/ExpenseMainPage";
+import ExpenseReportMainPage from "../components/expense_report/ExpenseReportMainPage";
+import ExpenseDetailPage from "../components/expense_report/ExpenseDetailPage";
+import ReceiptsMainPage from "../components/receipts/ReceiptsMainPage";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +36,22 @@ const router = createBrowserRouter([
       {
         path: "/sales",
         element: <SalesMainPage />,
+      },
+      {
+        path: "/receipts",
+        element: <ReceiptsMainPage />,
+      },
+      {
+        path: "/expense",
+        element: <ExpenseMainPage />,
+      },
+      {
+        path: "/expense-report",
+        element: <ExpenseReportMainPage />,
+      },
+      {
+        path: "/expense/:provider/:expenseDate",
+        element: <ExpenseDetailPage />,
       },
       {
         path: "/stock",

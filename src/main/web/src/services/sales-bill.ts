@@ -21,6 +21,8 @@ export interface BillSummary {
   billTotal: number;
   billDate: string;
   customer: Customer;
+  receivedTotal: number;
+  receivedInFull: boolean;
 }
 export interface Summary<T> {
   totalAmount: number;
@@ -37,11 +39,12 @@ export interface Bill {
   unitPrice: number;
   lineTotal: number;
 }
-export interface BillHead {
+export interface SaleBillResponse {
   customer: Customer;
   billNumber: number;
   billDate: string;
   billTotal: number;
+  billDetails: BillDetail[];
 }
 
 export interface BillDetail {

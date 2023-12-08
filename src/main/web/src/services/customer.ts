@@ -7,6 +7,8 @@ export interface AddCustomerRequest {
 export interface Customer {
   customerId: number;
   customerName: string;
+  saleTotal: number;
+  receivedTotal: number;
 }
 
 const CustomerService = <T>(endpoint: string) => {

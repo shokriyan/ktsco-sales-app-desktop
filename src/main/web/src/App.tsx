@@ -6,7 +6,7 @@ import Header from "./components/header/Header";
 function App() {
   return (
     <Grid templateAreas={`"header" "main"`}>
-      <GridItem area={"header"}>
+      <GridItem area={"header"} className="hide-print">
         <Header />
       </GridItem>
       <GridItem area={"main"} padding={5}>

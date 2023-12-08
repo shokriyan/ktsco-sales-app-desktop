@@ -1,13 +1,13 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { Bill } from "../../services/sales-bill";
-import { CustomTable } from "../shared/CustomTable";
 import { currency } from "../../hooks/number-format";
+import { BillDetail, SaleBillResponse } from "../../services/sales-bill";
+import { CustomTable } from "../shared/CustomTable";
 interface Props {
-  bills: Bill[];
+  billResponse: SaleBillResponse;
 }
 
-const BillDetailTable = ({ bills }: Props) => {
-  const columnHelper = createColumnHelper<Bill>();
+const BillDetailTable = ({ billResponse }: Props) => {
+  const columnHelper = createColumnHelper<BillDetail>();
   const columns = [
     columnHelper.accessor("billId", {
       cell: (info) => info.getValue(),
@@ -34,7 +34,7 @@ const BillDetailTable = ({ bills }: Props) => {
       header: "مجموع",
     }),
   ];
-  return <CustomTable data={bills} columns={columns} />;
+  return <CustomTable data={billResponse.billDetails} columns={columns} />;
 };
 
 export default BillDetailTable;
