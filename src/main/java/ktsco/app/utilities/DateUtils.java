@@ -8,7 +8,6 @@ import ktsco.app.exceptions.ErrorResponseException;
 import org.springframework.http.HttpStatus;
 
 public class DateUtils {
-  private static final String KABUL_TIME_ZONE = "Asia/Kabul";
   private static final DateTimeFormatter DEFAULT_DATE_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-M-d");
 

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class AddExpenseRequest {
-  private long expenseId;
   private String expenseDate;
   private String provider;
   private List<ExpenseDetailDTO> expenseDetails;

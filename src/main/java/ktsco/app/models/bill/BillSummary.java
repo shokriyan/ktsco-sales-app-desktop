@@ -16,4 +16,6 @@ public class BillSummary {
   private Customer customer;
   private String billDate;
   private BigDecimal billTotal;
+  private BigDecimal receivedTotal;
+  private boolean receivedInFull;
 }

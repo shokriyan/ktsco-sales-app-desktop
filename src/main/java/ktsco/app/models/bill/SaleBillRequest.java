@@ -14,5 +14,5 @@ public class SaleBillRequest {
   private long customerId;
   private String billDate;
   private long billNumber;
-  private List<BillDetail> billDetails;
+  private List<BillDetailRequest> billDetailRequests;
 }

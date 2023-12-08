@@ -1,10 +1,9 @@
 package ktsco.app.controllers;
 
-import java.util.List;
 import ktsco.app.codes.CodeMap;
-import ktsco.app.models.bill.BillResponse;
 import ktsco.app.models.bill.BillSummary;
 import ktsco.app.models.bill.SaleBillRequest;
+import ktsco.app.models.bill.SaleBillResponse;
 import ktsco.app.models.general.ApiResponse;
 import ktsco.app.models.general.Summary;
 import ktsco.app.services.BillService;
@@ -37,7 +36,14 @@ public class BillController {
   }
 
   @GetMapping("/get-bill")
-  public ResponseEntity<List<BillResponse>> getBill(@RequestParam("billNumber") long billNumber) {
+  public ResponseEntity<SaleBillResponse> getBill(@RequestParam("billNumber") long billNumber) {
     return new ResponseEntity<>(billService.getBillByNumber(billNumber), HttpStatus.OK);
+  }
+
+  @DeleteMapping("/delete")
+  public ResponseEntity<ApiResponse> deleteBill(@RequestParam("billNumber") long billNumber) {
+    billService.deleteBillByBillNumber(billNumber);
+    return new ResponseEntity<>(
+        ApiResponse.builder().code(CodeMap.B103.name()).build(), HttpStatus.ACCEPTED);
   }
 }

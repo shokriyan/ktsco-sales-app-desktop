@@ -4,6 +4,7 @@ import java.util.List;
 import ktsco.app.codes.CodeMap;
 import ktsco.app.entities.Customer;
 import ktsco.app.models.customer.AddCustomerRequest;
+import ktsco.app.models.customer.ICustomerSummary;
 import ktsco.app.models.general.ApiResponse;
 import ktsco.app.services.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class CustomerController {
   }
 
   @GetMapping("/all")
-  public ResponseEntity<List<Customer>> getAllCustomers() {
-    return new ResponseEntity<>(customerService.getCustomers(), HttpStatus.OK);
+  public ResponseEntity<List<ICustomerSummary>> getAllCustomers() {
+    return new ResponseEntity<>(customerService.getCustomerSummary(), HttpStatus.OK);
   }
 
   @DeleteMapping("/delete")

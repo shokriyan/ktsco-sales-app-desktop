@@ -5,16 +5,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import ktsco.app.codes.CodeMap;
 import ktsco.app.entities.Bill;
 import ktsco.app.exceptions.ErrorResponseException;
-import ktsco.app.models.bill.BillResponse;
-import ktsco.app.models.bill.BillSummary;
-import ktsco.app.models.bill.IBillSummaryInterface;
-import ktsco.app.models.bill.SaleBillRequest;
+import ktsco.app.models.bill.*;
 import ktsco.app.models.general.Summary;
+import ktsco.app.models.receipts.IReceiptSummary;
 import ktsco.app.repository.BillRepository;
+import ktsco.app.repository.ReceiptsRepository;
 import ktsco.app.utilities.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,9 +26,10 @@ public class BillService {
   private final BillRepository billRepository;
   private final CustomerService customerService;
   private final ProductService productService;
+  private final ReceiptsRepository receiptsRepository;
 
   public void saveBillRequest(SaleBillRequest request) {
-    List<BillResponse> billsByNumber = getBillByNumber(request.getBillNumber());
+    List<Bill> billsByNumber = billRepository.findBillsByBillNumber(request.getBillNumber());
     if (!billsByNumber.isEmpty()) {
       throw new ErrorResponseException(HttpStatus.BAD_REQUEST, CodeMap.B101);
     }
@@ -36,7 +37,7 @@ public class BillService {
     LocalDate billDate = DateUtils.toLocalDate(request.getBillDate());
 
     request
-        .getBillDetails()
+        .getBillDetailRequests()
         .forEach(
             detail -> {
               var product = productService.findById(detail.getProductId());
@@ -56,29 +57,30 @@ public class BillService {
     billRepository.save(bill);
   }
 
-  public List<BillResponse> getBillByNumber(long billNumber) {
-    List<BillResponse> billResponses = new ArrayList<>();
-    var bills =
-        findAllBills().stream()
-            .filter(bill -> bill.getBillNumber() == billNumber)
-            .collect(Collectors.toList());
+  public SaleBillResponse getBillByNumber(long billNumber) {
+    List<SaleBillDetailResponse> billDetailsResponses = new ArrayList<>();
+    var bills = billRepository.findBillsByBillNumber(billNumber);
+    if (bills.isEmpty()) {
+      throw new ErrorResponseException(HttpStatus.NOT_FOUND, CodeMap.B104);
+    }
     bills.forEach(
         each -> {
-          String jalaliDate = DateUtils.toJalaliLocalDate(each.getBillDate());
           var billResponse =
-              BillResponse.builder()
-                  .customer(each.getCustomer())
-                  .billDate(jalaliDate)
+              SaleBillDetailResponse.builder()
                   .billId(each.getBillId())
-                  .billNumber(each.getBillNumber())
                   .product(each.getProduct())
                   .quantity(each.getQuantity())
                   .unitPrice(each.getUnitPrice())
                   .lineTotal(each.getLineTotal())
                   .build();
-          billResponses.add(billResponse);
+          billDetailsResponses.add(billResponse);
         });
-    return billResponses;
+    return SaleBillResponse.builder()
+        .billDetails(billDetailsResponses)
+        .billNumber(billNumber)
+        .billDate(DateUtils.toJalaliLocalDate(bills.get(0).getBillDate()))
+        .customer(bills.get(0).getCustomer())
+        .build();
   }
 
   public List<Bill> findAllBills() {
@@ -122,12 +124,18 @@ public class BillService {
     bills.forEach(
         each -> {
           var customer = customerService.findById(each.getCustomerId());
+          Optional<IReceiptSummary> billReceipt =
+              receiptsRepository.getReceiptSummary(each.getBillNumber());
           summaries.add(
               BillSummary.builder()
                   .customer(customer)
                   .billNumber(each.getBillNumber())
                   .billTotal(each.getBillTotal())
                   .billDate(DateUtils.toJalaliLocalDate(each.getBillDate()))
+                  .receivedTotal(
+                      billReceipt.map(IReceiptSummary::getTotalReceipt).orElse(BigDecimal.ZERO))
+                  .receivedInFull(
+                      billReceipt.map(IReceiptSummary::getBillReceivedInFull).orElse(false))
                   .build());
         });
     summaries.sort(Comparator.comparing(BillSummary::getBillDate).reversed());
@@ -137,5 +145,12 @@ public class BillService {
     summary.setTotalAmount(
         summaries.stream().map(BillSummary::getBillTotal).reduce(BigDecimal.ZERO, BigDecimal::add));
     return summary;
+  }
+
+  public void deleteBillByBillNumber(long billNumber) {
+    var billReceipts = receiptsRepository.findAllByBillNumber(billNumber);
+    if (!billReceipts.isEmpty())
+      throw new ErrorResponseException(HttpStatus.BAD_REQUEST, CodeMap.B102);
+    billRepository.deleteAll(billRepository.findBillsByBillNumber(billNumber));
   }
 }

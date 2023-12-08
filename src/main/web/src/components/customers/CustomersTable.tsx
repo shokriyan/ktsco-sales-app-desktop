@@ -5,6 +5,7 @@ import { Customer } from "../../services/customer";
 import { CustomTable } from "../shared/CustomTable";
 import IconBtn from "../shared/buttons/IconBtn";
 import DeleteCustomer from "./DeleteCustomer";
+import { currency } from "../../hooks/number-format";
 
 interface Props {
   customers: Customer[];
@@ -37,6 +38,20 @@ const CustomersTable = ({ customers, onDeleteSuccess }: Props) => {
     columnHelper.accessor("customerName", {
       cell: (info) => info.getValue(),
       header: "نام مشتری",
+    }),
+    columnHelper.accessor("saleTotal", {
+      cell: (info) => currency(info.getValue()),
+      header: "مجموع فروشات",
+    }),
+    columnHelper.accessor("receivedTotal", {
+      cell: (info) => currency(info.getValue()),
+      header: "مجموع رسیدها",
+    }),
+    columnHelper.display({
+      id: "remainder",
+      cell: (info) =>
+        currency(info.row.original.saleTotal - info.row.original.receivedTotal),
+      header: "مجموع بدهی",
     }),
   ];
   return (

@@ -3,7 +3,7 @@ export function currency(number: number) {
     style: "currency",
     currency: "USD",
   });
-  return USDollar.format(number);
+  return USDollar.format(number || 0);
 }
 
 export function numberFormat(number: number) {
